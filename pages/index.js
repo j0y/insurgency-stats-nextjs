@@ -4,15 +4,7 @@ import {supabase} from "../components/supabaseClient";
 
 export default function Home({matches}) {
   return (
-    <div className="App">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <Matches matches={matches} />
-
-    </div>
   )
 }
 
