@@ -7,7 +7,7 @@ function formatDate(unixTimestamp) {
     let day = "0" + date.getDate();
 
     return date.getFullYear() +
-        "-" + (date.getMonth() + 1) +
+        "-" + (date.getMonth() + 1).toString().padStart(2, '0') +
         "-" + day.substr(-2) +
         " " + hours.substr(-2) + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
 }
