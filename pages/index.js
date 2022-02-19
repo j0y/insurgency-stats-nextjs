@@ -1,10 +1,14 @@
 import Head from 'next/head'
 import Matches from "../components/Matches";
 import {supabase} from "../components/supabaseClient";
+import PlayerSearch from "../components/PlayerSearch";
 
-export default function Home({matches}) {
+export default function Home({matches, users}) {
   return (
-      <Matches matches={matches} />
+      <>
+          <Matches matches={matches} />
+          <PlayerSearch users={users} />
+      </>
   )
 }
 
@@ -26,9 +30,24 @@ export const getStaticProps = async () => {
         matches = matches.concat(matchesBatch);
     } while (size > 0 );
 
+    let users = [];
+    page = 0;
+    do {
+        const {data: usersBatch, error} = await supabase.from("users")
+            .select(`id, name, avatar_hash`)
+            .order('id', {ascending: true})
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+        if (error) throw error
+        page++;
+        size = users.length;
+
+        users = users.concat(usersBatch);
+    } while (size > 0);
+
     return {
         props: {
             matches,
+            users,
         }
     }
 }
