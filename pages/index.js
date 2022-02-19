@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import Link from 'next/link'
 import Matches from "../components/Matches";
 import {supabase} from "../components/supabaseClient";
 import PlayerSearch from "../components/PlayerSearch";
@@ -8,6 +8,14 @@ export default function Home({matches, users}) {
       <>
           <Matches matches={matches} />
           <PlayerSearch users={users} />
+          <br /><br />
+          <div>
+              <Link
+                  href={`/all_stats`}
+              >
+                  <a>{'All users'}</a>
+              </Link>
+          </div>
       </>
   )
 }
