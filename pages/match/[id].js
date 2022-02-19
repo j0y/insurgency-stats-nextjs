@@ -109,15 +109,26 @@ export const getStaticProps = async (context) => {
 }
 
 export async function getStaticPaths() {
-    const {data: matches, error} = await supabase.from("matches")
-        .select(`id, started_at, map, won`)
-        .order('started_at', {ascending: false})
-        .range(0, 10) //TODO: pagination
-    if (error) throw error
+    const PAGE_SIZE = 500
+    let matchIDs = [];
+
+    let size;
+    let page = 0;
+    do {
+        const {data: matches, error} = await supabase.from("matches")
+            .select(`id, started_at, map, won`)
+            .order('started_at', {ascending: false})
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
+        if (error) throw error
+        page++;
+        size = matches.length;
+
+        matchIDs = matchIDs.concat(matches.map(match => match.id.toString()));
+    } while (size > 0 );
 
     // Get the paths we want to pre-render based on posts
-    const paths = matches.map(match => ({
-        params: {id: match.id.toString()},
+    const paths = matchIDs.map(id => ({
+        params: {id: id},
     }));
 
     // We'll pre-render only these paths at build time.
