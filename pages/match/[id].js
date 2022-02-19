@@ -116,7 +116,7 @@ export async function getStaticPaths() {
     let page = 0;
     do {
         const {data: matches, error} = await supabase.from("matches")
-            .select(`id, started_at, map, won`)
+            .select(`id`)
             .order('started_at', {ascending: false})
             .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
         if (error) throw error
