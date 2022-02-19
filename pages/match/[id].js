@@ -92,7 +92,9 @@ export const getStaticProps = async (context) => {
         .select()
         .eq('id', context.params.id)
         .single()
-    if (error) throw error
+    if (error) return {
+        notFound: true
+    }
 
     const {data: userStats, errorus} = await supabase.from("match_user_stats")
         .select(`user_id, users (name, avatar_hash), kills, deaths, weapon_stats`)
@@ -132,5 +134,5 @@ export async function getStaticPaths() {
     }));
 
     // We'll pre-render only these paths at build time.
-    return {paths, fallback: false}
+    return {paths, fallback: 'blocking'}
 }
